@@ -65,12 +65,11 @@ class UserLoginView(View):
                     """用户处于激活状态"""
                     login(request, user)
                     return render(request, "index.html", {"msg": '登录成功'})
-                else:
-                    """如果不存在用户"""
-                    return render(request, "login.html", {"msg": '用户没有激活！'})
+            else:
+                return render(request, "login.html", {"msg": "用户名或者密码不正确"})
         else:
             """如果校验不通过,将表单的错误信息传回"""
-            return render(request, "login.html", {"msg": "用户名或者密码不正确", "login_form": login_form})
+            return render(request, "login.html", {"login_form": login_form})
 
 
 class UserLogoutView(View):
