@@ -13,9 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
-from users.views import IndexShowView, UserLoginView, UserLogoutView
+from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView
 from django.conf import settings
 from django.views.static import serve
 
@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^login/$', UserLoginView.as_view(), name='login'),
     url(r'^logout/$', UserLogoutView.as_view(), name='logout'),
+    url(r'^register/$', UserRegisterView.as_view(), name='register'),
+    url(r'^captcha/', include('captcha.urls')),
 ]

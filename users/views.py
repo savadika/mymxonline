@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile
@@ -79,3 +79,11 @@ class UserLogoutView(View):
         """退出页面展示"""
         logout(request)
         return  render(request, "login.html")
+
+
+class UserRegisterView(View):
+    """用户注册操作"""
+    def get(self, request):
+        register_form = RegisterForm(request.POST)
+        return render(request, "register.html", {'register_form':register_form})
+
