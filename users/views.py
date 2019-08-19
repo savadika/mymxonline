@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile
 from django.db.models import Q  # 使用Q来实现并集查询
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 
@@ -78,12 +79,31 @@ class UserLogoutView(View):
     def get(self, request):
         """退出页面展示"""
         logout(request)
-        return  render(request, "login.html")
+        return render(request, "login.html")
 
 
 class UserRegisterView(View):
     """用户注册操作"""
+
     def get(self, request):
         register_form = RegisterForm(request.POST)
-        return render(request, "register.html", {'register_form':register_form})
+        return render(
+            request, "register.html", {
+                'register_form': register_form})
 
+    def post(self, request):
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            user_name = request.POST.get('email')
+            pass_word = request.POST.get('password')
+            # 保存用户信息到数据库
+            user_profile = UserProfile()
+            user_profile.username = user_name
+            user_profile.email = user_name
+            user_profile.password = make_password(pass_word)
+            user_profile.save()
+            return render(request, 'login.html', {})
+        else:
+            return render(
+                request, 'register.html', {
+                    'register_form': register_form})

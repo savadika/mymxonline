@@ -31,4 +31,4 @@ class RegisterForm(forms.Form):
             'required': '请输入密码',
             'min_length': '密码不少于6个字符'}
     )
-    captcha = CaptchaField()
+    captcha = CaptchaField(error_messages={'invalid': '验证码错误'})
