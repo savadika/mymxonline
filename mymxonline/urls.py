@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from users.views import IndexShowView, UserLoginView, UserLogoutView
+from django.conf import settings
+from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^index/$', IndexShowView.as_view(), name='index'),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^login/$', UserLoginView.as_view(), name='login'),
+    url(r'^logout/$', UserLogoutView.as_view(), name='logout'),
 ]

@@ -30,6 +30,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# 自定义用户验证方法
+AUTHENTICATION_BACKENDS=(
+    'users.views.MyBackend',
+)
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -55,7 +62,7 @@ ROOT_URLCONF = 'mymxonline.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -85,6 +93,9 @@ DATABASES = {
     }
 }
 
+# 设置默认的用户数据表为user下的userprofile表
+AUTH_USER_MODEL = "users.UserProfile"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -105,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Internationalization，设置后台管理语言为中文
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -123,3 +134,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+# 对于静态文件还需要设置这个
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+#对于非静态文件，也要增加
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
