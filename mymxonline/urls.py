@@ -15,16 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView
+from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView, UserActiveView
 from django.conf import settings
 from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^index/$', IndexShowView.as_view(), name='index'),
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^media/(?P<path>.*)$', serve,
+        {'document_root': settings.MEDIA_ROOT}),
     url(r'^login/$', UserLoginView.as_view(), name='login'),
     url(r'^logout/$', UserLogoutView.as_view(), name='logout'),
     url(r'^register/$', UserRegisterView.as_view(), name='register'),
     url(r'^captcha/', include('captcha.urls')),
+    # 将任意active后面的值取出，复制给code，传递给后端
+    url(r'^active/(?P<code>.*)$', UserActiveView.as_view(), name='active')
 ]

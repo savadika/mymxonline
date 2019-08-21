@@ -3,9 +3,10 @@ from django.views.generic.base import View
 from .forms import LoginForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile
+from .models import UserProfile, EmailVertifyRecord
 from django.db.models import Q  # 使用Q来实现并集查询
 from django.contrib.auth.hashers import make_password
+from untils.send_my_emails import send_mxonline_mail
 
 # Create your views here.
 
@@ -66,6 +67,8 @@ class UserLoginView(View):
                     """用户处于激活状态"""
                     login(request, user)
                     return render(request, "index.html", {"msg": '登录成功'})
+                else:
+                    return render(request, "login.html", {"msg": "用户尚未激活！"})
             else:
                 return render(request, "login.html", {"msg": "用户名或者密码不正确"})
         else:
@@ -96,14 +99,38 @@ class UserRegisterView(View):
         if register_form.is_valid():
             user_name = request.POST.get('email')
             pass_word = request.POST.get('password')
-            # 保存用户信息到数据库
+            # 1 保存用户信息到数据库
             user_profile = UserProfile()
             user_profile.username = user_name
             user_profile.email = user_name
             user_profile.password = make_password(pass_word)
+            user_profile.is_active = False
             user_profile.save()
-            return render(request, 'login.html', {})
+            # 2 发送激活邮件给用户
+            send_status = send_mxonline_mail(user_name, 'register')
+            if send_status:
+                return render(request, 'login.html', {})
+            else:
+                return render(request, 'register.html')
         else:
             return render(
                 request, 'register.html', {
                     'register_form': register_form})
+
+
+class UserActiveView(View):
+    """用户激活操作"""
+    def get(self, request, code):
+        if code:
+            #fiter用来取多条数据，返回的是一个列表[]
+            email_record = EmailVertifyRecord.objects.filter(active_code=code)
+            if email_record:
+                for record in email_record:
+                    user_email = record.email
+                    # get用来去单条数据
+                    user = UserProfile.objects.get(email=user_email)
+                    user.is_active = True
+                    user.save()
+                    return render(request, 'login.html', {})
+        else:
+            return render(request, 'login.html', {})

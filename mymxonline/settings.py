@@ -142,3 +142,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 #对于非静态文件，也要增加
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 发送邮件的配置
+EMAIL_HOST = "smtp.sina.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "mxdjango@sina.com"
+EMAIL_HOST_PASSWORD = 'bd839ba9fab55d93'
+EMAIL_USE_TLS = False
+EMAIL_FROM = "mxdjango@sina.com"
