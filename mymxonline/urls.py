@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView, UserActiveView
+from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView, UserActiveView, ForgetPwdView, PassWordReserView, ModifyPwdView
 from django.conf import settings
 from django.views.static import serve
 
@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'^register/$', UserRegisterView.as_view(), name='register'),
     url(r'^captcha/', include('captcha.urls')),
     # 将任意active后面的值取出，复制给code，传递给后端
-    url(r'^active/(?P<code>.*)$', UserActiveView.as_view(), name='active')
+    url(r'^active/(?P<code>.*)$', UserActiveView.as_view(), name='active'),
+    url(r'^forgetpwd/$', ForgetPwdView.as_view(), name='forgetpwd'),
+    url(r'^reset/(?P<code>.*)$', PassWordReserView.as_view(), name='resetpwd'),
+    url(r'^modify/$', ModifyPwdView.as_view(), name='modify_pwd')
 ]

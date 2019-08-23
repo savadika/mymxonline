@@ -23,10 +23,17 @@ def send_mxonline_mail(email, type="register"):
     email_record.send_type = type
     email_record.save()
     # 2 配置发送邮件的基本信息，包括setting
-    EMAIL_TITLE = '来自慕学在线的激活邮件'
-    EMAIL_CONTENT = '请点击以下链接激活你的mxonline账号，http://127.0.0.1:8000/active/{0}'.format(
-        active_code)
+    EMAIL_TITLE =''
+    EMAIL_CONTENT = ''
+    if type == 'register':
+        EMAIL_TITLE = '来自慕学在线的激活邮件'
+        EMAIL_CONTENT = '请点击以下链接激活你的mxonline账号，http://127.0.0.1:8000/active/{0}'.format(
+            active_code)
     # 3 调用发送邮件方法进行发送激活码给用户
+    if type == 'reset':
+        EMAIL_TITLE = '请重置你的慕学在线密码'
+        EMAIL_CONTENT = '请点击以下链接激活你的mxonline账号，http://127.0.0.1:8000/reset/{0}'.format(
+            active_code)
     send_status = send_mail(EMAIL_TITLE, EMAIL_CONTENT, EMAIL_FROM, [EMAIL_FROM])
     return send_status
 

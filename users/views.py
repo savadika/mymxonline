@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ResetPasswordForm, ConfigPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile, EmailVertifyRecord
@@ -100,6 +100,10 @@ class UserRegisterView(View):
             user_name = request.POST.get('email')
             pass_word = request.POST.get('password')
             # 1 保存用户信息到数据库
+            if UserProfile.objects.filter(email=user_name):
+                return render(
+                    request, 'register.html', {
+                        'msg': '用户已经注册', 'register_form': register_form})
             user_profile = UserProfile()
             user_profile.username = user_name
             user_profile.email = user_name
@@ -120,9 +124,10 @@ class UserRegisterView(View):
 
 class UserActiveView(View):
     """用户激活操作"""
+
     def get(self, request, code):
         if code:
-            #fiter用来取多条数据，返回的是一个列表[]
+            # fiter用来取多条数据，返回的是一个列表[]
             email_record = EmailVertifyRecord.objects.filter(active_code=code)
             if email_record:
                 for record in email_record:
@@ -132,5 +137,66 @@ class UserActiveView(View):
                     user.is_active = True
                     user.save()
                     return render(request, 'login.html', {})
+            else:
+                return render(request, 'register_failed.html', {})
         else:
-            return render(request, 'login.html', {})
+            return render(request, 'register_failed.html', {})
+
+
+class ForgetPwdView(View):
+    """重置密码操作"""
+
+    def get(self, request):
+        """显示重置页面"""
+        reset_pwd_form = ResetPasswordForm(request.POST)
+        return render(
+            request, 'forgetpwd.html', {
+                'reset_pwd_form': reset_pwd_form})
+
+    def post(self, request):
+        """向用户发送一封邮件，并告知成功发送"""
+        reset_pwd_form = ResetPasswordForm(request.POST)
+        if reset_pwd_form.is_valid():
+            email = request.POST.get('email')
+            # 1 邮箱是否存在
+            # 2 向这个用户发送一封重置邮件
+            # 3 跳向重置成功界面
+            users = UserProfile.objects.filter(email=email)
+            for user in users:
+                if user:
+                    send_status = send_mxonline_mail(user.email, 'reset')
+                    if send_status:
+                        return render(request, 'reset_success.html', {})
+                    else:
+                        return render(request, 'register_failed.html', {})
+        else:
+            return render(request, 'forgetpwd.html', {'msg': '用户名或验证码错误'})
+
+
+class PassWordReserView(View):
+    """重置密码操作"""
+    """注意需要传回userid"""
+
+    def get(self, request, code):
+        verfity_code = EmailVertifyRecord.objects.get(active_code=code)
+        return render(
+            request, 'password_reset.html', {
+                'user_id': verfity_code.email})
+
+
+class ModifyPwdView(View):
+    def post(self, request):
+        config_password = ConfigPasswordForm(request.POST)
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        if config_password.is_valid():
+            if password1 != password2:
+                return render(
+                    request, 'password_reset.html', {
+                        'user_id': email, 'msg': '两次密码不一致'})
+            else:
+                user = UserProfile.objects.get(email=email)
+                user.password = make_password(password1)
+                user.save()
+        return render(request, 'login.html', {})
