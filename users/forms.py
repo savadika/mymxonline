@@ -35,11 +35,13 @@ class RegisterForm(forms.Form):
 
 
 class ResetPasswordForm(forms.Form):
+    """重置密码验证器"""
     email = forms.EmailField(required=True)
     captcha = CaptchaField(error_messages={'invalid': '验证码错误'})
 
 
 class ConfigPasswordForm(forms.Form):
+    """重复输入密码验证器"""
     password1 = forms.CharField(required=True, min_length=6, max_length=20)
     password2 = forms.CharField(required=True, min_length=6, max_length=20)
 

@@ -45,6 +45,7 @@ class EmailVertifyRecord(models.Model):
         verbose_name="类型", max_length=20)
     send_time = models.DateTimeField(verbose_name="发送时间", default=datetime.now)
 
+
     class Meta:
         verbose_name = "邮箱验证"
         verbose_name_plural = verbose_name

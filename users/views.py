@@ -52,7 +52,7 @@ class UserLoginView(View):
         """
         用户登录操作
         :param request:
-        :return:
+        :return
         """
         # 对数据进行校验，构建一个校验器对request传过来的数据进行校验
         login_form = LoginForm(request.POST)

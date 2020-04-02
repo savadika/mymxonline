@@ -36,6 +36,7 @@ AUTHENTICATION_BACKENDS=(
 )
 
 
+# 加入需要使用的模块
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     'captcha',
 ]
 
+
+# django自定义的中间件，是request和response的基础
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

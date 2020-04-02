@@ -18,6 +18,7 @@ from django.contrib import admin
 from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegisterView, UserActiveView, ForgetPwdView, PassWordReserView, ModifyPwdView
 from django.conf import settings
 from django.views.static import serve
+from organation.views import OrgView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,5 +33,7 @@ urlpatterns = [
     url(r'^active/(?P<code>.*)$', UserActiveView.as_view(), name='active'),
     url(r'^forgetpwd/$', ForgetPwdView.as_view(), name='forgetpwd'),
     url(r'^reset/(?P<code>.*)$', PassWordReserView.as_view(), name='resetpwd'),
-    url(r'^modify/$', ModifyPwdView.as_view(), name='modify_pwd')
+    url(r'^modify/$', ModifyPwdView.as_view(), name='modify_pwd'),
+    #课程机构
+    url(r'^org_list/$', OrgView.as_view(), name='org_list')
 ]
