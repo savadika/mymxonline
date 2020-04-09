@@ -13,4 +13,3 @@ class OrgView(View):
         print(dir(request.session))
         return render(request, 'org-list.html', {})
 
-
