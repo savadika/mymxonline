@@ -19,9 +19,10 @@ from users.views import IndexShowView, UserLoginView, UserLogoutView, UserRegist
 from django.conf import settings
 from django.views.static import serve
 from organation.views import OrgView
+import xadmin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^xadmin/', xadmin.site.urls),
     url(r'^index/$', IndexShowView.as_view(), name='index'),
     url(r'^media/(?P<path>.*)$', serve,
         {'document_root': settings.MEDIA_ROOT}),

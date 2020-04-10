@@ -75,7 +75,7 @@ class Teacher(models.Model):
         verbose_name="所属机构")
     work_years = models.IntegerField(default=0, verbose_name="教龄")
     work_company = models.CharField(max_length=100, verbose_name="工作公司")
-    work_postion = models.CharField(max_length=50, verbose_name="公司职位")
+    work_position = models.CharField(max_length=50, verbose_name="公司职位")
     points = models.CharField(max_length=50, verbose_name="教学特点")
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
