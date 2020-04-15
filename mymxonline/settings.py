@@ -145,7 +145,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
-# 对于非静态文件，也要增加
+# 对于图片上传，需要做如下设置，首先添加media文件夹
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
