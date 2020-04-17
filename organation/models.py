@@ -41,7 +41,7 @@ class CourseOrg(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
     images = models.ImageField(
-        upload_to='org/%Y/%M',
+        upload_to='org/%Y/%m',
         max_length=100,
         verbose_name="机构头像")
     address = models.CharField(max_length=200, verbose_name="地址")
@@ -81,7 +81,7 @@ class Teacher(models.Model):
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
     age = models.IntegerField(default=28, verbose_name="年龄")
     images = models.ImageField(
-        upload_to='teacher/%Y/%M',
+        upload_to='teacher/%Y/%m',
         max_length=300,
         verbose_name="头像")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
