@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'organation',
     'xadmin',
     'crispy_forms',
+    'pure_pagination',
 ]
 
 
@@ -156,3 +157,12 @@ EMAIL_HOST_USER = "mxdjango@sina.com"
 EMAIL_HOST_PASSWORD = 'bd839ba9fab55d93'
 EMAIL_USE_TLS = False
 EMAIL_FROM = "mxdjango@sina.com"
+
+
+#分页相关参数
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}

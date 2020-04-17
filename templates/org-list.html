@@ -43,7 +43,7 @@
 				</ul>
 			</div>
 
-            {% for course_org in org_lists %}
+            {% for course_org in org_lists.object_list %}
                 <dl class="des difdes">
                     <dt>
                         <a href="org-detail-homepage.html">
@@ -53,7 +53,7 @@
                     <dd>
                         <div class="clearfix">
                              <a href="org-detail-homepage.html">
-                                 <h1>慕课网</h1>
+                                 <h1>{{ course_org.name }}</h1>
                                  <div class="pic fl">
 
                                          <img src="../images/authentication.png"/>
@@ -65,7 +65,7 @@
                         </div>
                         <ul class="cont">
                             <li class="first"><p class="pic9">课程数：<span>1</span></p><p class="c7">学习人数：<span>1000</span></p></li>
-                            <li class="c8" style="padding-left:18px;">北京市海淀区中关村北大街</li>
+                            <li class="c8" style="padding-left:18px;">{{ course_org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
 
                                     <a href="/diary/19/">c语言基础入门</a>
@@ -80,33 +80,39 @@
             {% endfor %}
 
 		</div>
+
 		 <div class="pageturn">
             <ul class="pagelist">
-
-
-
-
-
-                            <li class="active"><a href="?page=1">1</a></li>
-
-
-
-
-
-                            <li><a href="?page=2" class="page">2</a></li>
-
-
-
-
-
-                            <li><a href="?page=3" class="page">3</a></li>
-
-
-
-
-                    <li class="long"><a href="?page=2">下一页</a></li>
-
-
+            {#分页的设置，对所有的page_obj都替换为我们自己的分页对象#}
+            {# 对前一页的设置#}
+                {% if org_lists.has_previous %}
+                    {# 如果有前一页，且需要显示，则显示前一页#}
+                    <li class="long"><a href="?{{ org_lists.previous_page_number.querystring }}">上一页</a></li>
+                {% else %}
+                    {#如果没有前一页,不要显示,则显示为空#}
+                {% endif %}
+                    {#循环数据#}
+                    {% for page in org_lists.pages %}
+                        {% if page %}
+                            {% ifequal page org_lists.number %}
+                            {# 如果是当前页#}
+                                <li class="active"><a href="?page=1">{{ page }}</a></li>
+                            {% else %}
+                            {#如果不是当前页#}
+                                <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                            {% endifequal %}
+                        {% else %}
+                            {#显示...#}
+                             <li class="none"><a href="">...</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {#显示后一页#}
+                    {% if org_lists.has_next %}
+                        {#如果需要显示后一页#}
+                        <li class="long"><a href="?{{ org_lists.next_page_number.querystring }}">下一页</a></li>
+                    {% else %}
+                        {#如果不需要显示后一页#}
+                    {% endif %}
             </ul>
         </div>
 		</div>
