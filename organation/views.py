@@ -8,13 +8,25 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 class OrgView(View):
     """课程列表视图"""
-
     def get(self, request):
         # 获取所有城市信息
         all_citys = CityDict.objects.all()
         # 索取所有课程信息
         org_lists = CourseOrg.objects.all()
         # 获取所有课程的数量
+
+
+        # 进行城市筛选
+        cityid = request.GET.get('city', '')
+        print(cityid)
+        if cityid:
+            org_lists = org_lists.filter(city_id = int(cityid))
+
+        # 进行机构的筛选
+        category = request.GET.get('ct','')
+        if category:
+            org_lists = org_lists.filter(category = category)
+
 
         # 进行分页
         #1 设置page变量，默认为从url中获取，没有的话设置为1
@@ -30,5 +42,7 @@ class OrgView(View):
         return render(request, 'org-list.html', {
             'all_citys': all_citys,
             'org_lists': page_orgs,
-            'org_nums': org_nums
+            'org_nums': org_nums,
+            'cityid':cityid,
+            'category':category
         })

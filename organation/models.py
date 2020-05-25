@@ -92,3 +92,19 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserAsk(models.Model):
+    """
+    用户提交咨询操作
+    姓名|手机|课程名称|添加时间
+    """
+    name = models.CharField(max_length=50, verbose_name="姓名", blank=False)
+    mobile = models.CharField(max_length=11, verbose_name="手机号", blank=False)
+    course_name = models.CharField(max_length=50, verbose_name="课程名称", blank=False)
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+
+    class Meta:
+        verbose_name = "用户咨询"
+        verbose_name_plural = verbose_name
+
