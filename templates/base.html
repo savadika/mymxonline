@@ -356,7 +356,7 @@
                     <input type="text" name="course_name" id="companyAddress" placeholder="课程名" maxlength="50" />
                 </div>
                 <p class="error company-tips" id="jsCompanyTips"></p>
-				<input class="btn" type="text" id="jsStayBtn" value="立即咨询 >" />
+				<input class="btn" type="text" id="jsStayBtn" value="立即咨询" />
             </form>
 		</div>
 
@@ -431,10 +431,13 @@
 <script src="{% static 'js/plugins/jquery.scrollLoading.js' %}"  type="text/javascript"></script>
 <script src="{% static 'js/deco-common.js' %}"  type="text/javascript"></script>
 
+
+{% block user_ask_js %}
 <script>
     $(function(){
         $(document).ready(function() {
             $('#jsStayBtn').on('click', function () {
+                console.log('111');
                 $.ajax({
                     cache: false,
                     type: "POST",
@@ -454,8 +457,8 @@
             });
         });
     })
-
 </script>
+{% endblock %}
 
 </body>
 </html>
